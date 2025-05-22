@@ -102,6 +102,34 @@ def optimization_tips():
 def resource_history():
     return jsonify(advanced_monitor.get_resource_history())
 
+@app.route('/api/memory_chart_data')
+def get_memory_chart_data():
+    """
+    Endpoint API untuk mendapatkan data penggunaan memori untuk grafik.
+    """
+    time_range = int(request.args.get('range', 300))  # Ambil rentang waktu dari query string (default 5 menit)
+    data = advanced_monitor.get_memory_history(time_range)
+    return jsonify(data)
+
+@app.route('/api/export_memory_pdf')
+def export_memory_pdf():
+    """
+    Endpoint API untuk menghasilkan dan mengirimkan laporan penggunaan memori dalam format PDF.
+    """
+    memory_data = advanced_monitor.get_memory_history()
+    # TODO: Implementasi pembuatan PDF menggunakan ReportLab atau FPDF
+    # Contoh sederhana (perlu dilengkapi):
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import letter
+
+    c = canvas.Canvas("memory_report.pdf", pagesize=letter)
+    c.drawString(100, 750, "Laporan Penggunaan Memori")
+    c.drawString(100, 730, f"Waktu: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    # Tambahkan data memori ke PDF (teks, tabel, dll.)
+
+    c.save()
+    return send_file("memory_report.pdf", as_attachment=True, download_name="memory_report.pdf")
+    
 @app.route('/api/hardware_info')
 def hardware_info():
     return jsonify({
