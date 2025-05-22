@@ -24,6 +24,7 @@ class AdvancedMonitoring:
             self.monitoring_thread.daemon = True
             self.monitoring_thread.start()
 
+    
     def _monitor_resources(self):
         while self.is_monitoring:
             try:
@@ -48,6 +49,17 @@ class AdvancedMonitoring:
                     'value': disk.percent
                 })
 
+                # Simpan detail memori untuk grafik
+        self.memory_history.append({
+            'timestamp': time.time(),
+            'total': memory.total,
+            'available': memory.available,
+            'used': memory.used,
+            'percent': memory.percent,
+            'swap_total': psutil.swap_memory().total,
+            'swap_used': psutil.swap_memory().used,
+            'swap_percent': psutil.swap_memory().percent
+        })
                 # Network Usage
                 net_io = psutil.net_io_counters()
                 self.resource_history['network'].append({
@@ -167,6 +179,23 @@ class AdvancedMonitoring:
         except Exception as e:
             return {'error': str(e)}
 
+    def get_memory_history(self, time_range=60):
+        """
+        Mendapatkan riwayat penggunaan memori dalam rentang waktu tertentu.
+
+        Args:
+            time_range (int, optional): Rentang waktu dalam detik. Defaults to 60.
+
+        Returns:
+            list: List yang berisi data penggunaan memori.
+        """
+        now = time.time()
+        history = [
+            item for item in list(self.memory_history)
+            if item['timestamp'] >= now - time_range
+        ]
+        return history
+        
     def get_startup_programs(self):
         try:
             # This is a placeholder as startup program detection varies by OS
