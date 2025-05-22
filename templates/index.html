@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hardware Monitor</title>
-    <!-- Konfigurasi Tailwind CSS yang lebih baik -->
     <script>
         tailwind.config = {
             theme: {
@@ -58,7 +57,6 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
         <header class="mb-8">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <div class="flex items-center mb-4 md:mb-0">
@@ -83,9 +81,7 @@
             </div>
         </header>
 
-        <!-- Main Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- CPU Section -->
             <div class="bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-blue-500">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold text-blue-400"><i class="fas fa-microchip mr-2"></i>CPU Information</h2>
@@ -127,8 +123,7 @@
                 <div class="mb-4">
                     <h3 class="font-semibold mb-2">Core Usage</h3>
                     <div id="cpu-cores-usage" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        <!-- Core usage bars will be inserted here -->
-                    </div>
+                        </div>
                 </div>
                 
                 <div>
@@ -143,14 +138,12 @@
                                 </tr>
                             </thead>
                             <tbody id="cpu-processes">
-                                <!-- Process data will be inserted here -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             
-            <!-- GPU Section -->
             <div class="bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-purple-500">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-bold text-purple-400"><i class="fas fa-tv mr-2"></i>GPU Information</h2>
@@ -220,7 +213,6 @@
                 </div>
             </div>
             
-            <!-- Memory Section -->
             <div class="bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-green-500">
                 <h2 class="text-xl font-bold text-green-400 mb-4"><i class="fas fa-memory mr-2"></i>Memory Information</h2>
                 
@@ -252,6 +244,17 @@
                     </div>
                 </div>
                 
+                <div class="mb-4">
+                    <h3 class="font-semibold mb-2 text-gray-300">Memory Usage Chart</h3>
+                    <canvas id="memoryChart" width="400" height="200"></canvas>
+                </div>
+
+                <div class="mb-4">
+                    <button id="export-memory-pdf" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Export to PDF
+                    </button>
+                </div>
+                
                 <div class="mt-5">
                     <h3 class="font-semibold mb-2 text-gray-300">Memory Details</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -275,13 +278,11 @@
                 </div>
             </div>
             
-            <!-- Storage Section -->
             <div class="bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-amber-500">
                 <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fas fa-hdd mr-2"></i>Storage Information</h2>
                 
                 <div id="disk-partitions" class="space-y-4">
-                    <!-- Disk partitions will be inserted here -->
-                </div>
+                    </div>
                 
                 <div class="mt-5">
                     <h3 class="font-semibold mb-2 text-gray-300">Disk I/O</h3>
@@ -299,7 +300,6 @@
             </div>
         </div>
         
-        <!-- Network Section -->
         <div class="mt-6 bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-indigo-500">
             <h2 class="text-xl font-bold text-indigo-400 mb-4"><i class="fas fa-network-wired mr-2"></i>Network Information</h2>
             
@@ -307,8 +307,7 @@
                 <div>
                     <h3 class="font-semibold mb-2 text-gray-300">Network Interfaces</h3>
                     <div id="network-interfaces" class="space-y-3">
-                        <!-- Network interfaces will be inserted here -->
-                    </div>
+                        </div>
                 </div>
                 
                 <div>
@@ -327,43 +326,34 @@
             </div>
         </div>
         
-        <!-- Power Management Section -->
         <div class="mt-6 bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-yellow-500">
             <h2 class="text-xl font-bold text-yellow-400 mb-4"><i class="fas fa-battery-full mr-2"></i>Power Management</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Battery Status -->
                 <div class="bg-gray-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold mb-3">Battery Status</h3>
                     <div id="battery-status" class="space-y-2">
-                        <!-- Battery information will be inserted here -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Power Consumption -->
                 <div class="bg-gray-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold mb-3">Power Consumption</h3>
                     <div id="power-consumption" class="space-y-2">
-                        <!-- Power consumption information will be inserted here -->
-                    </div>
+                        </div>
                 </div>
 
-                <!-- Power Mode -->
                 <div class="bg-gray-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold mb-3">Power Mode</h3>
                     <div id="power-mode" class="space-y-2">
-                        <!-- Power mode information will be inserted here -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
 
-        <!-- Reporting Section -->
         <div class="mt-6 bg-gray-800 rounded-lg shadow-lg p-4 border-t-2 border-blue-500">
             <h2 class="text-xl font-bold text-blue-400 mb-4"><i class="fas fa-chart-line mr-2"></i>Performance Reports</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Report Generation -->
                 <div class="bg-gray-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold mb-3">Generate Report</h3>
                     <div class="space-y-4">
@@ -374,12 +364,10 @@
                     </div>
                 </div>
 
-                <!-- Report History -->
                 <div class="bg-gray-700 rounded-lg p-4">
                     <h3 class="text-lg font-semibold mb-3">Report History</h3>
                     <div id="report-history" class="space-y-2">
-                        <!-- Report history will be inserted here -->
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
