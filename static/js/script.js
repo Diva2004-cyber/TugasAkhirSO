@@ -118,7 +118,98 @@ function updateCpuInfo(cpu) {
         `;
         coresContainer.appendChild(coreElement);
     });
-    
+
+    // Inisialisasi grafik (pastikan Chart.js sudah di-import)
+const memoryChartCtx = document.getElementById('memoryChart').getContext('2d');
+let memoryChart;
+
+function initializeMemoryChart() {
+    memoryChart = new Chart(memoryChartCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'RAM Usage (%)',
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false
+            }, {
+                label: 'Swap Usage (%)',
+                data: [],
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'second'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            },
+            plugins: {
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+}
+
+// Fungsi untuk memperbarui grafik penggunaan memori
+function updateMemoryChartData(timeRange = 300) { // Default time range: 5 minutes
+    fetch(`/api/memory_chart_data?range=${timeRange}`)
+        .then(response => response.json())
+        .then(data => {
+            const labels = data.map(item => new Date(item.timestamp * 1000)); // Convert timestamps to Date objects
+            const ramData = data.map(item => item.percent);
+            const swapData = data.map(item => item.swap_percent);
+
+            memoryChart.data.labels = labels;
+            memoryChart.data.datasets[0].data = ramData;
+            memoryChart.data.datasets[1].data = swapData;
+            memoryChart.update();
+        })
+        .catch(error => console.error('Error fetching memory chart data:', error));
+}
+
+// Fungsi untuk menangani ekspor PDF
+document.getElementById('export-memory-pdf').addEventListener('click', () => {
+    fetch('/api/export_memory_pdf')
+        .then(response => response.blob())
+        .then(blob => {
+            // Buat URL sementara untuk blob
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'memory_report.pdf'; // Nama file default
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        })
+        .catch(error => console.error('Error exporting memory to PDF:', error));
+});
+
+// Panggil fungsi inisialisasi dan pembaruan grafik saat halaman dimuat
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMemoryChart();
+    updateMemoryChartData();
+    setInterval(updateMemoryChartData, 5000); // Perbarui grafik setiap 5 detik
+});
+
     // CPU processes
     const processesTable = document.getElementById('cpu-processes');
     processesTable.innerHTML = '';
